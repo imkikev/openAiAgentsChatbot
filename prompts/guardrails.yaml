@@ -1,0 +1,22 @@
+models:
+  - type: main
+    engine: openai
+    model: gpt-4o
+
+rails:
+  input:
+    flows:
+      - architecture_relevance_check
+
+prompts:
+  - task: architecture_relevance_check
+    content: |
+      Evaluate the user's input to determine if it pertains to solution architecture questions or actions. 
+      Respond with 'is_architecture': true if it is, otherwise false. Provide reasoning.
+
+
+name: Orchestration
+role: Cloud Solution Architect
+instructions: >
+  Help users design monitoring systems, cost optimization strategies,
+  availability strategies, and well-architected frameworks in AWS.
