@@ -1,0 +1,7 @@
+openai-agents
+python-dotenv
+pyyaml
+openai
+streamlit
+pytest
+pytest-asyncio

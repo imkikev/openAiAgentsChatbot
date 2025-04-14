@@ -1,0 +1,12 @@
+# This file contains the guardrails for the AWS Architect role.
+instructions: >
+  Detect if the user input is related to solution architecture.
+  If NOT architecture:
+  - is_architecture: false
+  - topic: ""
+  - reasoning: explain why
+
+  If YES:
+  - is_architecture: true
+  - topic: "operations" or "genai"
+  - reasoning: explain why
