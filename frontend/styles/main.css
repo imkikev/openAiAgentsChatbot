@@ -1,0 +1,21 @@
+html, body, [class*="css"] {
+    background-color: #0e1117;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.stChatInputContainer {
+    background: linear-gradient(to right, #1e293b, #0f172a);
+    padding: 1rem;
+    box-shadow: 0 -5px 10px rgba(0,0,0,0.3);
+}
+
+.stTextInput > div > div > input {
+    background-color: #1f2937;
+    color: white;
+    border-radius: 5px;
+}
+
+.block-container {
+    padding-bottom: 100px;
+}

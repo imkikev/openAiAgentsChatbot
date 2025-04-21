@@ -5,7 +5,6 @@ from backend.agents.sa_genai_agent import sa_genai_agent
 from backend.agents.sa_operations_agent import sa_operations_agent
 
 import os
-import asyncio
 import yaml
 
 # Load environment variables
