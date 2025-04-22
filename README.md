@@ -68,8 +68,10 @@ To save test results to a file:
 python3 -m pytest tests/test_main.py > test_results.txt
 ```
 
-```
+
 ## Project Structure
+
+```
 openAiAgentText/
 ├── backend/                    # Backend logic
 │   ├── agents/                 # Agent definitions
