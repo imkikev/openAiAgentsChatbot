@@ -68,6 +68,7 @@ To save test results to a file:
 python3 -m pytest tests/test_main.py > test_results.txt
 ```
 
+```
 ## Project Structure
 openAiAgentText/
 ├── backend/                    # Backend logic
@@ -91,6 +92,9 @@ openAiAgentText/
 ├── requirements.txt            # Python dependencies
 ├── [README.md](http://_vscodecontentref_/5)                   # Project documentation
 └── pytest.ini                  # Pytest configuration
+```
+
+
 
 ## Dependencies
 
