@@ -24,6 +24,8 @@ For more details, refer to the [official documentation](https://openai.github.io
 - **Guardrails**: Input validation and routing using guardrails.
 - **Asynchronous Execution**: Supports asynchronous operations for efficient processing.
 - **Testing**: Includes unit tests for backend logic using `pytest` and `pytest-asyncio`.
+- **File Retrieval with Vector Store**: Retrieve relevant information from your uploaded documents using OpenAI’s FileSearchTool.
+
 
 ---
 
@@ -40,10 +42,26 @@ For more details, refer to the [official documentation](https://openai.github.io
    pip3 install -r requirements.txt
    ```
 
-3. Create a .env file in the root directory and add your OpenAI API key:
+3. Create a .env file in the root directory and add your OpenAI API key and Vector Store ID::
    ```bash
    OPENAI_API_KEY=your_openai_api_key_here
+   VECTOR_STORE_ID=your_vector_store_id_here
    ```
+   - **To obtain a `VECTOR_STORE_ID`, you can:**
+
+   - **Upload files via the OpenAI Platform UI:**
+   
+      1. Navigate to [OpenAI's platform](https://platform.openai.com/).
+      2. Go to the **"Files"** section.      
+      3. Create a new vector store and attach your uploaded file.
+      4. Retrieve the `VECTOR_STORE_ID` from the vector store details.
+
+   - **Or use the OpenAI CLI:**
+
+      ```bash
+      openai file create -p assistants -f my_document.pdf
+      openai vector-store create -f <file_id>
+      ```   
 
 ## Usage
 
@@ -67,30 +85,6 @@ To save test results to a file:
 ```bash
 python3 -m pytest tests/test_main.py > test_results.txt
 ```
-
-## Project Structure
-openAiAgentText/
-├── backend/                    # Backend logic
-│   ├── agents/                 # Agent definitions
-│   │   ├── sa_genai_agent.py   # Generative AI specialist agent
-│   │   ├── sa_operations_agent.py # Operations specialist agent
-│   │   └── __init__.py
-│   ├── prompts/                # YAML files for agent instructions
-│   │   ├── guardrails.yaml
-│   │   ├── sa_operations_instructions.yaml
-│   │   └── sa_genai_agent_instructions.yaml
-│   ├── [main.py](http://_vscodecontentref_/3)                 # Backend entry point
-│   └── __init__.py
-├── frontend/                   # Frontend logic
-│   ├── [chatbot_app.py](http://_vscodecontentref_/4)          # Streamlit chatbot application
-│   └── __init__.py
-├── tests/                      # Unit and integration tests
-│   ├── test_main.py            # Tests for backend logic
-│   └── __init__.py
-├── .env                        # Environment variables (ignored by Git)
-├── requirements.txt            # Python dependencies
-├── [README.md](http://_vscodecontentref_/5)                   # Project documentation
-└── pytest.ini                  # Pytest configuration
 
 ## Dependencies
 
