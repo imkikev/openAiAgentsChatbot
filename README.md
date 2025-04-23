@@ -86,6 +86,29 @@ To save test results to a file:
 python3 -m pytest tests/test_main.py > test_results.txt
 ```
 
+
+## Project Structure
+
+```
+openAiAgentsChatbot/
+├── backend/                    # Backend logic
+│   ├── agents/                 # Agent definitions
+│   │   ├── sa_genai_agent.py   # Generative AI specialist agent
+│   │   ├── sa_operations_agent.py # Operations specialist agent
+│   ├── prompts/                # YAML files for agent instructions
+│   │   ├── guardrails.yaml
+│   │   ├── sa_operations_instructions.yaml
+│   │   └── sa_genai_agent_instructions.yaml
+│   ├── [main.py](http://_vscodecontentref_/3)                 # Backend entry point
+├── frontend/                   # Frontend logic
+│   ├── [chatbot_app.py](http://_vscodecontentref_/4)          # Streamlit chatbot application
+├── tests/                      # Unit and integration tests
+│   ├── test_main.py            # Tests for backend logic
+├── .env                        # Environment variables (ignored by Git)
+├── requirements.txt            # Python dependencies
+├── [README.md](http://_vscodecontentref_/5)                   # Project documentation
+```
+
 ## Dependencies
 
 Install the following Python packages:
