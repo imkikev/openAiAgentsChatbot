@@ -35,6 +35,7 @@ guardrail_agent = Agent(
     model="gpt-4o"
 )
 
+# Define the input guardrail
 @InputGuardrail
 async def architecture_guardrail(ctx, agent, input_data):
     result = await Runner.run(guardrail_agent, input_data, context=ctx.context)
@@ -53,7 +54,7 @@ async def architecture_guardrail(ctx, agent, input_data):
         tripwire_triggered=not final_output.is_architecture,
     )
 
-# Triage agent with lambda handoffs
+# Triage agent
 triage_agent = Agent(
     name="SA Triage Agent",
     instructions=triage_agent_instructions,
