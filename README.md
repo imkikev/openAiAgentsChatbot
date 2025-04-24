@@ -1,6 +1,6 @@
-# OpenAI Agents SDK Chatbot by Kike
+# Multi-Provider AI Agent Chatbot with OpenAI SDK
 
-This project is a chatbot application powered by OpenAI agents. It includes a backend for managing agents and guardrails, and a frontend built with Streamlit for user interaction. The project also supports testing with `pytest` and uses environment variables for secure configuration.
+This project is an AI chatbot powered by the [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/), capable of using different LLM providers, including OpenAI and AWS Bedrock. It features multi-agent orchestration, guardrails, and a Streamlit-based interface for interaction. The project supports secure configuration via `.env` and seamless provider switching using [LiteLLM](https://github.com/BerriAI/litellm).
 
 ## 🔧 Powered by OpenAI Agents SDK
 
@@ -23,10 +23,29 @@ For more details, refer to the [official documentation](https://openai.github.io
 - **Agent Management**: Backend logic for managing multiple agents, including a triage agent and specialized agents.
 - **Guardrails**: Input validation and routing using guardrails.
 - **Asynchronous Execution**: Supports asynchronous operations for efficient processing.
+- **Multi-Provider Support**: Automatically switches between OpenAI and AWS Bedrock (Anthropic Claude 3) using LiteLLM, based on available environment credentials.
 - **Testing**: Includes unit tests for backend logic using `pytest` and `pytest-asyncio`.
-- **File Retrieval with Vector Store**: Retrieve relevant information from your uploaded documents using OpenAI’s FileSearchTool.
+- **File Retrieval with Vector Store (Optional)**: Retrieve relevant information from your uploaded documents using OpenAI’s `FileSearchTool`.  
+  If no `VECTOR_STORE_ID` is provided, the agent will still function normally using only the base model.
 
+## Model Provider Flexibility with LiteLLM
 
+The `sa_genai_agent` is designed to dynamically select between different LLM providers:
+
+- If `AWS_ACCESS_KEY_ID` and related AWS credentials are found in your environment or `.env`, it uses **Anthropic Claude 3 Sonnet** via **AWS Bedrock**.
+- If not, it defaults to **OpenAI’s GPT-4o model** — no configuration changes needed.
+
+This is enabled using the [LiteLLM](https://github.com/BerriAI/litellm) integration, making the agent flexible and cost-efficient depending on your cloud environment.
+
+### Example `.env`
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+VECTOR_STORE_ID=your_vector_store_id_here
+AWS_ACCESS_KEY_ID=your_aws_access_key_id_here
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key_here
+AWS_REGION_NAME=eu-west-1
+```
 ---
 
 ## Installation
@@ -42,26 +61,31 @@ For more details, refer to the [official documentation](https://openai.github.io
    pip3 install -r requirements.txt
    ```
 
-3. Create a .env file in the root directory and add your OpenAI API key and Vector Store ID::
+3. Create a `.env` file in the root directory and add your credentials. The app will use OpenAI by default, but if AWS credentials are present, it will use AWS Bedrock with the Anthropic Claude 3 model:
    ```bash
    OPENAI_API_KEY=your_openai_api_key_here
    VECTOR_STORE_ID=your_vector_store_id_here
+   OPENAI_API_KEY=your_openai_api_key_here
+   VECTOR_STORE_ID=your_vector_store_id_here (optional)
+   AWS_ACCESS_KEY_ID=your_aws_access_key_id_here (optional)
+   AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key_here (optional)
+   AWS_REGION_NAME=eu-west-1 (optional)
    ```
-   - **To obtain a `VECTOR_STORE_ID`, you can:**
+   - **To obtain a `VECTOR_STORE_ID`** (optional – the app will still work even if you don't provide a vector store):
 
-   - **Upload files via the OpenAI Platform UI:**
-   
-      1. Navigate to [OpenAI's platform](https://platform.openai.com/).
-      2. Go to the **"Files"** section.      
-      3. Create a new vector store and attach your uploaded file.
-      4. Retrieve the `VECTOR_STORE_ID` from the vector store details.
+      - **Upload files via the OpenAI Platform UI:**
 
-   - **Or use the OpenAI CLI:**
+         1. Navigate to [OpenAI's platform](https://platform.openai.com/).
+         2. Go to the **"Files"** section.      
+         3. Create a new vector store and attach your uploaded file.
+         4. Retrieve the `VECTOR_STORE_ID` from the vector store details.
 
-      ```bash
-      openai file create -p assistants -f my_document.pdf
-      openai vector-store create -f <file_id>
-      ```   
+      - **Or use the OpenAI CLI:**
+
+         ```bash
+         openai file create -p assistants -f my_document.pdf
+         openai vector-store create -f <file_id>
+         ```
 
 ## Usage
 
@@ -133,6 +157,8 @@ pip3 install pyyaml
 pip3 install openai streamlit
 pip3 install pytest
 pip3 install pytest-asyncio
+pip3 install "openai-agents[litellm]"
+pip3 install litellm
 ```
 
 ## Author
