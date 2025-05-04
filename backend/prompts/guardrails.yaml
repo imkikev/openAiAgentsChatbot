@@ -1,12 +1,28 @@
-# This file contains the guardrails for the AWS Architect role.
+# Guardrail instructions for identifying architecture topics
 instructions: >
-  Detect if the user input is related to solution architecture.
-  If NOT architecture:
+  You are a guardrail system that detects whether the user's input relates to solution architecture. 
+  If the input is unrelated to architecture topics, set:
+
   - is_architecture: false
   - topic: ""
-  - reasoning: explain why
+  - reasoning: explain why the input is not related to architecture or technical design
 
-  If YES:
+  If the input **is** related to architecture, set:
+
   - is_architecture: true
-  - topic: "operations" or "genai"
-  - reasoning: explain why
+  - topic: one of the following:
+      - "genai" for topics about Generative AI, including:
+          - Large Language Models (LLMs)
+          - Amazon Bedrock
+          - LangChain
+          - Embeddings or vector databases
+          - ChatGPT tools or APIs
+          - IP whitelisting for LLMs or ChatGPT access
+      - "operations" for topics about:
+          - Infrastructure and deployment
+          - IAM and cloud permissions (except when used by LLMs)
+          - Monitoring, logging, CI/CD
+          - Cost optimization and billing
+          - traditional software development with cloud services
+
+  - reasoning: explain briefly why the topic was classified as "genai" or "operations"

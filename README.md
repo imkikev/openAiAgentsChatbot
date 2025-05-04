@@ -25,6 +25,7 @@ For more details, refer to the [official documentation](https://openai.github.io
 - **Asynchronous Execution**: Supports asynchronous operations for efficient processing.
 - **Multi-Provider Support**: Automatically switches between OpenAI and AWS Bedrock (Anthropic Claude 3) using LiteLLM, based on available environment credentials.
 - **Testing**: Includes unit tests for backend logic using `pytest` and `pytest-asyncio`.
+- **Custom Tools with Function Calling**: Create Python functions (like fetching ChatGPT IP whitelist) and expose them to LLMs using `@function_tool`.
 - **File Retrieval with Vector Store (Optional)**: Retrieve relevant information from your uploaded documents using OpenAI’s `FileSearchTool`.  
   If no `VECTOR_STORE_ID` is provided, the agent will still function normally using only the base model.
 
@@ -110,6 +111,46 @@ To save test results to a file:
 python3 -m pytest tests/test_main.py > test_results.txt
 ```
 
+### 🤖 Agent Routing Examples
+
+These examples show how user inputs are routed to the correct agent or rejected, based on the triage logic and guardrails.
+
+---
+
+#### 💬 Example 1
+```text
+User Input: How can I integrate Amazon Bedrock with LangChain?
+```
+- 🔍 **Summary**: A question about using generative AI tools and orchestration frameworks.  
+- 🤖 **Routed Agent**: `SA Generative AI Specialist (sa_genai_agent)`
+
+#### 💬 Example 2
+```text
+User Input: How can I automate deployment pipelines using GitHub Actions and AWS CodePipeline?
+```
+- 🔍 **Summary**: A DevOps/operations-related question about CI/CD automation.  
+- 🤖 **Routed Agent**: `SA Operations Specialist (sa_operations_agent)`
+
+#### 💬 Example 3
+```text
+User Input: Regarding my Generative AI Chatbot architecture, I need to whitelist an IP address for ChatGPT. Could you provide one?
+```
+- 🔍 **Summary**: Generative AI architecture with a specific technical requirement (ChatGPT IPs). will call a Custom Tool (chatgpt_actions_tool.py)   
+- 🤖 **Routed Agent**: `SA Generative AI Specialist (sa_genai_agent)`
+
+#### 💬 Example 4
+```text
+User Input: What is 1 + 1?
+```
+- 🔍 **Summary**: A general question not related to architecture.  
+- ❌ **Routed Agent**: ` None – blocked by guardrail (is_architecture: false)`
+
+## 🔌 Custom Tool Example
+
+This project includes a custom tool (`get_chatgpt_actions`) that uses a public OpenAI API to fetch the latest [ChatGPT IP whitelist](https://openai.com/chatgpt-actions.json). 
+
+The tool is implemented as a Python function and exposed to the LLM via the `@function_tool` decorator.
+
 
 ## Project Structure
 
@@ -119,7 +160,10 @@ openAiAgentsChatbot/
 │   ├── agents/                 # Agent definitions
 │   │   ├── sa_genai_agent.py   # Generative AI specialist agent
 │   │   ├── sa_operations_agent.py # Operations specialist agent
-│   ├── prompts/                # YAML files for agent instructions
+│   ├── tools/                # YAML files for 
+│   │   ├── chatgpt_actions_tool.py  # Tool to fetch ChatGPT IP whitelist
+│   ├── prompts/                # YAML files for 
+agent instructions
 │   │   ├── guardrails.yaml
 │   │   ├── sa_operations_instructions.yaml
 │   │   └── sa_genai_agent_instructions.yaml
@@ -163,7 +207,7 @@ pip3 install litellm
 
 ## Author
 
-Developed by Kike.
+Developed by imKikev.
 
 ---
 

@@ -1,10 +1,10 @@
 from agents import Agent, WebSearchTool, ModelSettings
 from agents.extensions.models.litellm_model import LitellmModel
+from dotenv import load_dotenv
+from backend.tools.chatgpt_actions_tool import get_chatgpt_actions
 import os
 import yaml
 import litellm
-from dotenv import load_dotenv
-
 
 # Retrieve credentials (they're either from the environment or just loaded from .env)
 load_dotenv()
@@ -44,7 +44,7 @@ else:
     web_search_tool = WebSearchTool()
     selected_model = model_openai
     selected_model_settings = ModelSettings(tool_choice="required")
-    selected_tools = [web_search_tool]
+    selected_tools = [web_search_tool,get_chatgpt_actions]
 
 # Create agent based on config
 sa_genai_agent = Agent(
@@ -54,3 +54,4 @@ sa_genai_agent = Agent(
     model_settings=selected_model_settings,
     tools=selected_tools,
 )
+

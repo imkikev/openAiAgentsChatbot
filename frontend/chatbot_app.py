@@ -28,8 +28,8 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # Page settings
-st.set_page_config(page_title="Kike's Chatbot", layout="centered")
-st.title("🤖 Kike's Chatbot")
+st.set_page_config(page_title="OpenAI Agents Chatbot", layout="centered")
+st.title("🤖 OpenAI Agents Chatbot")
 
 # Load and inject custom CSS
 base_dir = os.path.dirname(os.path.abspath(__file__))
