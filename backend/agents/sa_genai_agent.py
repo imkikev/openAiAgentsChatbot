@@ -31,11 +31,10 @@ with open(os.path.join(prompts_dir, 'sa_genai_agent_instructions.yaml'), 'r') as
     model_openai = config['model_openai']
     model_aws = config['model_aws']
 
-# Detect if AWS credentials are available
-use_bedrock = bool(aws_access_key)
-
+# Detect if model is OpenAI or AWS Bedrock
+provider = os.getenv("MODEL_PROVIDER", "openai").lower()
 # Conditionally configure the model
-if use_bedrock:
+if provider == "bedrock" and aws_access_key:
     selected_model = LitellmModel(model=model_aws)
     selected_model_settings = ModelSettings()  # Optional: adjust as needed
     selected_tools = []  # Optionally enable tools if Bedrock supports them
