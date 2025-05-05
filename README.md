@@ -33,7 +33,7 @@ For more details, refer to the [official documentation](https://openai.github.io
 
 The `sa_genai_agent` is designed to dynamically select between different LLM providers:
 
-- If `AWS_ACCESS_KEY_ID` and related AWS credentials are found in your environment or `.env`, it uses **Anthropic Claude 3 Sonnet** via **AWS Bedrock**.
+- If `MODEL_PROVIDER` is set to "bedrock" and `AWS_ACCESS_KEY_ID` and related AWS credentials are found in your environment or `.env`, it uses **Anthropic Claude 3 Sonnet** via **AWS Bedrock**.
 - If not, it defaults to **OpenAI’s GPT-4o model** — no configuration changes needed.
 
 This is enabled using the [LiteLLM](https://github.com/BerriAI/litellm) integration, making the agent flexible and cost-efficient depending on your cloud environment.
@@ -42,10 +42,11 @@ This is enabled using the [LiteLLM](https://github.com/BerriAI/litellm) integrat
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
-VECTOR_STORE_ID=your_vector_store_id_here
-AWS_ACCESS_KEY_ID=your_aws_access_key_id_here
-AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key_here
-AWS_REGION_NAME=eu-west-1
+VECTOR_STORE_ID=your_vector_store_id_here (optional)
+AWS_ACCESS_KEY_ID=your_aws_access_key_id_here (optional)
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key_here (optional)
+AWS_REGION_NAME=eu-west-1 (optional)
+MODEL_PROVIDER=openai  # "openai" or "bedrock"
 ```
 ---
 
@@ -63,14 +64,13 @@ AWS_REGION_NAME=eu-west-1
    ```
 
 3. Create a `.env` file in the root directory and add your credentials. The app will use OpenAI by default, but if AWS credentials are present, it will use AWS Bedrock with the Anthropic Claude 3 model:
-   ```bash
-   OPENAI_API_KEY=your_openai_api_key_here
-   VECTOR_STORE_ID=your_vector_store_id_here
+   ```bash   
    OPENAI_API_KEY=your_openai_api_key_here
    VECTOR_STORE_ID=your_vector_store_id_here (optional)
    AWS_ACCESS_KEY_ID=your_aws_access_key_id_here (optional)
    AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key_here (optional)
    AWS_REGION_NAME=eu-west-1 (optional)
+   MODEL_PROVIDER=openai  # "openai" or "bedrock"
    ```
    - **To obtain a `VECTOR_STORE_ID`** (optional – the app will still work even if you don't provide a vector store):
 
@@ -87,7 +87,7 @@ AWS_REGION_NAME=eu-west-1
          openai file create -p assistants -f my_document.pdf
          openai vector-store create -f <file_id>
          ```
-
+---
 ## Usage
 
 ### Run the Chatbot
@@ -111,11 +111,11 @@ To save test results to a file:
 python3 -m pytest tests/test_main.py > test_results.txt
 ```
 
+---
 ### 🤖 Agent Routing Examples
 
 These examples show how user inputs are routed to the correct agent or rejected, based on the triage logic and guardrails.
 
----
 
 #### 💬 Example 1
 ```text
@@ -145,13 +145,14 @@ User Input: What is 1 + 1?
 - 🔍 **Summary**: A general question not related to architecture.  
 - ❌ **Routed Agent**: ` None – blocked by guardrail (is_architecture: false)`
 
+---
 ## 🔌 Custom Tool Example
 
 This project includes a custom tool (`get_chatgpt_actions`) that uses a public OpenAI API to fetch the latest [ChatGPT IP whitelist](https://openai.com/chatgpt-actions.json). 
 
 The tool is implemented as a Python function and exposed to the LLM via the `@function_tool` decorator.
 
-
+---
 ## Project Structure
 
 ```
@@ -160,23 +161,23 @@ openAiAgentsChatbot/
 │   ├── agents/                 # Agent definitions
 │   │   ├── sa_genai_agent.py   # Generative AI specialist agent
 │   │   ├── sa_operations_agent.py # Operations specialist agent
-│   ├── tools/                # YAML files for 
+│   ├── tools/
 │   │   ├── chatgpt_actions_tool.py  # Tool to fetch ChatGPT IP whitelist
-│   ├── prompts/                # YAML files for 
-agent instructions
+│   ├── prompts/                # agent instructions
 │   │   ├── guardrails.yaml
 │   │   ├── sa_operations_instructions.yaml
 │   │   └── sa_genai_agent_instructions.yaml
-│   ├── [main.py](http://_vscodecontentref_/3)                 # Backend entry point
+│   │   └── triage_agent_instructions.yaml
+│   ├── [main.py](http://_vscodecontentref_/3) # Backend entry point
 ├── frontend/                   # Frontend logic
-│   ├── [chatbot_app.py](http://_vscodecontentref_/4)          # Streamlit chatbot application
+│   ├── [chatbot_app.py](http://_vscodecontentref_/4) # Streamlit chatbot application
 ├── tests/                      # Unit and integration tests
 │   ├── test_main.py            # Tests for backend logic
 ├── .env                        # Environment variables (ignored by Git)
 ├── requirements.txt            # Python dependencies
-├── [README.md](http://_vscodecontentref_/5)                   # Project documentation
+├── [README.md](http://_vscodecontentref_/5) # Project documentation
 ```
-
+---
 ## Dependencies
 
 Install the following Python packages:
@@ -203,6 +204,7 @@ pip3 install pytest
 pip3 install pytest-asyncio
 pip3 install "openai-agents[litellm]"
 pip3 install litellm
+pip3 install boto3
 ```
 
 ## Author

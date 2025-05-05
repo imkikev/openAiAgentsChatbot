@@ -7,3 +7,4 @@ pytest
 pytest-asyncio
 openai-agents[litellm]
 litellm
+boto3
